@@ -1,5 +1,5 @@
 # In _toc.yml
 format: jb-book
-root: landing-page
+root: blog_notebook_test
 chapters:
 - file: blog_notebook_test
