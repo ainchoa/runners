@@ -3,6 +3,8 @@
 
 # # Optimal BMI for runners
 # 
+# ## Intro
+# 
 # In this project we analyse data from Olympic runners and give you an estimate of the optimal BMI to enhance your running performance.
 
 # In[1]:
@@ -95,3 +97,45 @@ sns.regplot(x='Height', y='Weight', data=r_numeric[r_numeric['Sex'] == 0])
 
 
 # But worry not, we've got you. Let's unpack this and make it useful for you.
+
+# ## Findings
+# 
+# What we realised during our investigation is...
+
+# ## Tell us about you
+# 
+# Now, let's see how we can make all of this useful to you. Let's start by getting to know you better.
+
+# In[11]:
+
+
+X_train, X_test, w_train, w_test = train_test_split(r_numeric[['Sex', 'Age','Height', 'Year', 'Event','Medal']], r_numeric['Weight'], random_state = 42, test_size = 0.2)
+
+
+# In[12]:
+
+
+regr = LinearRegression()
+
+regr.fit(X_train, w_train)
+
+w_pred = regr.predict(X_test)
+
+r2_score(w_test, w_pred)
+
+
+# In[13]:
+
+
+s = input("Are you a male (0) or female (1)")
+w = input("How much do you weight in kg?")
+h = input("What's your height in cm?")
+a = input("How old are you?")
+y = input("What year is it?")
+e = input("What distance (in m) are you training for? (E.g. 100, 200, 5000...)")
+
+subject = {'Sex': s, 'Age': a, 'Height': h, 'Year': y, 'Event':e, 'Medal': 1}
+subject_df = pd.DataFrame(subject, index=[0])
+w_subject = regr.predict(subject_df)
+w_subject
+
