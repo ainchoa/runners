@@ -178,104 +178,20 @@
   <div class="tex2jax_ignore mathjax_ignore section" id="optimal-bmi-for-runners">
 <h1>Optimal BMI for runners<a class="headerlink" href="#optimal-bmi-for-runners" title="Permalink to this headline">¶</a></h1>
 <p>In this project we analyse data from Olympic runners and give you an estimate of the optimal BMI to enhance your running performance.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#hide</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
-<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span>
-<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
-<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">mean_squared_error</span><span class="p">,</span> <span class="n">r2_score</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-
-<span class="n">olympic</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;athlete_events.csv&#39;</span><span class="p">)</span>
-</pre></div>
+<div class="cell tag_remove-input docutils container">
 </div>
+<div class="cell tag_remove-input docutils container">
 </div>
+<div class="cell tag_remove-input docutils container">
 </div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#hide</span>
-<span class="n">hundred_m</span> <span class="o">=</span> <span class="n">olympic</span><span class="p">[</span><span class="n">olympic</span><span class="p">[</span><span class="s1">&#39;Event&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Athletics Men&#39;s 100 metres&quot;</span><span class="p">]</span>
-<span class="n">hundred_f</span> <span class="o">=</span> <span class="n">olympic</span><span class="p">[</span><span class="n">olympic</span><span class="p">[</span><span class="s1">&#39;Event&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Athletics Women&#39;s 100 metres&quot;</span><span class="p">]</span>
-
-<span class="n">two_h_m</span> <span class="o">=</span> <span class="n">olympic</span><span class="p">[</span><span class="n">olympic</span><span class="p">[</span><span class="s1">&#39;Event&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Athletics Men&#39;s 200 metres&quot;</span><span class="p">]</span>
-<span class="n">two_h_f</span> <span class="o">=</span> <span class="n">olympic</span><span class="p">[</span><span class="n">olympic</span><span class="p">[</span><span class="s1">&#39;Event&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Athletics Women&#39;s 200 metres&quot;</span><span class="p">]</span>
-
-<span class="n">four_h_m</span> <span class="o">=</span> <span class="n">olympic</span><span class="p">[</span><span class="n">olympic</span><span class="p">[</span><span class="s1">&#39;Event&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Athletics Men&#39;s 400 metres&quot;</span><span class="p">]</span>
-<span class="n">four_h_f</span> <span class="o">=</span> <span class="n">olympic</span><span class="p">[</span><span class="n">olympic</span><span class="p">[</span><span class="s1">&#39;Event&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Athletics Women&#39;s 400 metres&quot;</span><span class="p">]</span>
-
-<span class="n">eight_h_m</span> <span class="o">=</span> <span class="n">olympic</span><span class="p">[</span><span class="n">olympic</span><span class="p">[</span><span class="s1">&#39;Event&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Athletics Men&#39;s 800 metres&quot;</span><span class="p">]</span>
-<span class="n">eight_h_f</span> <span class="o">=</span> <span class="n">olympic</span><span class="p">[</span><span class="n">olympic</span><span class="p">[</span><span class="s1">&#39;Event&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Athletics Women&#39;s 800 metres&quot;</span><span class="p">]</span>
-
-<span class="n">oneandhalfk_m</span> <span class="o">=</span> <span class="n">olympic</span><span class="p">[</span><span class="n">olympic</span><span class="p">[</span><span class="s1">&#39;Event&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Athletics Men&#39;s 1,500 metres&quot;</span><span class="p">]</span>
-<span class="n">oneandhalfk_f</span> <span class="o">=</span> <span class="n">olympic</span><span class="p">[</span><span class="n">olympic</span><span class="p">[</span><span class="s1">&#39;Event&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Athletics Men&#39;s 1,500 metres&quot;</span><span class="p">]</span>
-
-<span class="n">fivek_m</span> <span class="o">=</span> <span class="n">olympic</span><span class="p">[</span><span class="n">olympic</span><span class="p">[</span><span class="s1">&#39;Event&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Athletics Men&#39;s 5,000 metres&quot;</span><span class="p">]</span>
-<span class="n">fivek_f</span> <span class="o">=</span> <span class="n">olympic</span><span class="p">[</span><span class="n">olympic</span><span class="p">[</span><span class="s1">&#39;Event&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Athletics Women&#39;s 5,000 metres&quot;</span><span class="p">]</span>
-
-<span class="n">tenk_m</span> <span class="o">=</span> <span class="n">olympic</span><span class="p">[</span><span class="n">olympic</span><span class="p">[</span><span class="s1">&#39;Event&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Athletics Men&#39;s 10,000 metres&quot;</span><span class="p">]</span>
-<span class="n">tenk_f</span> <span class="o">=</span> <span class="n">olympic</span><span class="p">[</span><span class="n">olympic</span><span class="p">[</span><span class="s1">&#39;Event&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Athletics Women&#39;s 10,000 metres&quot;</span><span class="p">]</span>
-
-<span class="n">marathon_m</span> <span class="o">=</span> <span class="n">olympic</span><span class="p">[</span><span class="n">olympic</span><span class="p">[</span><span class="s1">&#39;Event&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Athletics Men&#39;s Marathon&quot;</span><span class="p">]</span>
-<span class="n">marathon_f</span> <span class="o">=</span> <span class="n">olympic</span><span class="p">[</span><span class="n">olympic</span><span class="p">[</span><span class="s1">&#39;Event&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Athletics Men&#39;s Marathon&quot;</span><span class="p">]</span>
-</pre></div>
+<div class="cell tag_remove-input docutils container">
 </div>
+<div class="cell tag_remove-input docutils container">
 </div>
+<div class="cell tag_remove-input docutils container">
 </div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#hide</span>
-<span class="n">runners_all</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">hundred_m</span><span class="p">,</span> <span class="n">hundred_f</span><span class="p">,</span> <span class="n">two_h_m</span><span class="p">,</span> <span class="n">two_h_f</span><span class="p">,</span> <span class="n">four_h_m</span><span class="p">,</span> <span class="n">four_h_f</span><span class="p">,</span> <span class="n">eight_h_m</span><span class="p">,</span> <span class="n">eight_h_f</span><span class="p">,</span> <span class="n">oneandhalfk_m</span><span class="p">,</span> <span class="n">oneandhalfk_f</span><span class="p">,</span> <span class="n">fivek_m</span><span class="p">,</span> <span class="n">fivek_f</span><span class="p">,</span> <span class="n">tenk_m</span><span class="p">,</span> <span class="n">tenk_f</span><span class="p">,</span> <span class="n">marathon_m</span><span class="p">,</span> <span class="n">marathon_f</span><span class="p">])</span>
-
-<span class="n">useful_columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ID&#39;</span><span class="p">,</span> <span class="s1">&#39;Sex&#39;</span><span class="p">,</span> <span class="s1">&#39;Age&#39;</span><span class="p">,</span> <span class="s1">&#39;Height&#39;</span><span class="p">,</span> <span class="s1">&#39;Weight&#39;</span><span class="p">,</span> <span class="s1">&#39;Year&#39;</span><span class="p">,</span> <span class="s1">&#39;Event&#39;</span><span class="p">,</span> <span class="s1">&#39;Medal&#39;</span><span class="p">]</span>
-
-<span class="n">runners</span> <span class="o">=</span> <span class="n">runners_all</span><span class="p">[</span><span class="n">useful_columns</span><span class="p">]</span>
-
-<span class="n">runners</span> <span class="o">=</span> <span class="n">runners</span><span class="p">[</span><span class="n">runners</span><span class="p">[</span><span class="s1">&#39;Year&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1980</span><span class="p">]</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#hide</span>
-<span class="n">numeric_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;F&#39;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;M&#39;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Athletics Men&#39;s 100 metres&quot;</span> <span class="p">:</span> <span class="mi">100</span><span class="p">,</span> <span class="s2">&quot;Athletics Women&#39;s 100 metres&quot;</span> <span class="p">:</span> <span class="mi">100</span><span class="p">,</span> <span class="s2">&quot;Athletics Men&#39;s 200 metres&quot;</span> <span class="p">:</span> <span class="mi">200</span><span class="p">,</span> \
-                <span class="s2">&quot;Athletics Women&#39;s 200 metres&quot;</span> <span class="p">:</span> <span class="mi">200</span><span class="p">,</span> <span class="s2">&quot;Athletics Men&#39;s 400 metres&quot;</span> <span class="p">:</span> <span class="mi">400</span><span class="p">,</span> <span class="s2">&quot;Athletics Women&#39;s 400 metres&quot;</span> <span class="p">:</span> <span class="mi">400</span><span class="p">,</span> <span class="s2">&quot;Athletics Men&#39;s 800 metres&quot;</span> <span class="p">:</span> <span class="mi">800</span><span class="p">,</span> \
-                <span class="s2">&quot;Athletics Women&#39;s 800 metres&quot;</span> <span class="p">:</span> <span class="mi">800</span><span class="p">,</span> <span class="s2">&quot;Athletics Men&#39;s 1,500 metres&quot;</span> <span class="p">:</span> <span class="mi">1500</span><span class="p">,</span> <span class="s2">&quot;Athletics Women&#39;s 1,500 metres&quot;</span> <span class="p">:</span> <span class="mi">1500</span><span class="p">,</span>  <span class="s2">&quot;Athletics Women&#39;s 5,000 metres&quot;</span> <span class="p">:</span> <span class="mi">5000</span><span class="p">,</span> \
-                <span class="s2">&quot;Athletics Men&#39;s 5,000 metres&quot;</span> <span class="p">:</span> <span class="mi">5000</span><span class="p">,</span> <span class="s2">&quot;Athletics Women&#39;s 10,000 metres&quot;</span> <span class="p">:</span> <span class="mi">10000</span><span class="p">,</span> <span class="s2">&quot;Athletics Men&#39;s 10,000 metres&quot;</span> <span class="p">:</span> <span class="mi">10000</span><span class="p">,</span> \
-                <span class="s2">&quot;Athletics Women&#39;s Marathon&quot;</span> <span class="p">:</span> <span class="mi">42195</span><span class="p">,</span> <span class="s2">&quot;Athletics Men&#39;s Marathon&quot;</span> <span class="p">:</span> <span class="mi">42195</span><span class="p">,</span> <span class="s1">&#39;Bronze&#39;</span> <span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;Silver&#39;</span> <span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;Gold&#39;</span> <span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;NaN&#39;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#hide</span>
-<span class="n">r_numeric</span> <span class="o">=</span> <span class="n">runners</span><span class="o">.</span><span class="n">replace</span><span class="p">({</span><span class="s2">&quot;Sex&quot;</span><span class="p">:</span> <span class="n">numeric_dict</span><span class="p">,</span> <span class="s1">&#39;Event&#39;</span><span class="p">:</span> <span class="n">numeric_dict</span><span class="p">,</span> <span class="s1">&#39;Medal&#39;</span><span class="p">:</span> <span class="n">numeric_dict</span><span class="p">})</span>
-
-<span class="n">r_numeric</span><span class="p">[</span><span class="s1">&#39;Medal&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">r_numeric</span><span class="p">[</span><span class="s1">&#39;Medal&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#hide</span>
-<span class="n">r_numeric</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<p>We looked at the data from actual Olympic athletes so you don’t have to:</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">set_theme</span><span class="p">(</span><span class="n">color_codes</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;Height&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Weight&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">r_numeric</span><span class="p">[</span><span class="n">r_numeric</span><span class="p">[</span><span class="s1">&#39;Sex&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
+<p>We looked at the data from actual Olympic athletes so you don’t have to, and here’s how it looked like:</p>
+<div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:xlabel=&#39;Height&#39;, ylabel=&#39;Weight&#39;&gt;
 </pre></div>
@@ -283,12 +199,7 @@
 <img alt="_images/blog_notebook_test_8_1.png" src="_images/blog_notebook_test_8_1.png" />
 </div>
 </div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;Height&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Weight&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">r_numeric</span><span class="p">[</span><span class="n">r_numeric</span><span class="p">[</span><span class="s1">&#39;Sex&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
+<div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:xlabel=&#39;Height&#39;, ylabel=&#39;Weight&#39;&gt;
 </pre></div>
@@ -296,6 +207,7 @@
 <img alt="_images/blog_notebook_test_9_1.png" src="_images/blog_notebook_test_9_1.png" />
 </div>
 </div>
+<p>But worry not, we’ve got you. Let’s unpack this and make it useful for you.</p>
 </div>
 
     <script type="text/x-thebe-config">
