@@ -1,5 +1,4 @@
 # in _config.yml
-title: "My book title"
-logo: images/logo-wide.svg
+title: "Optimal BMI blog post"
 execute:
   execute_notebooks: "off"
