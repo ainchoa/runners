@@ -5,7 +5,7 @@
 In this project we analyse data from Olympic runners and give you an estimate of the optimal BMI to enhance your running performance.
 
 
-```python, echo=FALSE
+```{python, echo=FALSE}
 import numpy as np
 import pandas as pd
 import seaborn as sns
@@ -18,7 +18,7 @@ olympic = pd.read_csv('athlete_events.csv')
 ```
 
 
-```python, echo=FALSE
+```{python, echo=FALSE}
 hundred_m = olympic[olympic['Event'] == "Athletics Men's 100 metres"]
 hundred_f = olympic[olympic['Event'] == "Athletics Women's 100 metres"]
 
@@ -45,7 +45,7 @@ marathon_f = olympic[olympic['Event'] == "Athletics Men's Marathon"]
 ```
 
 
-```python, echo=FALSE
+```{python, echo=FALSE}
 runners_all = pd.concat([hundred_m, hundred_f, two_h_m, two_h_f, four_h_m, four_h_f, eight_h_m, eight_h_f, oneandhalfk_m, oneandhalfk_f, fivek_m, fivek_f, tenk_m, tenk_f, marathon_m, marathon_f])
 
 useful_columns = ['ID', 'Sex', 'Age', 'Height', 'Weight', 'Year', 'Event', 'Medal']
@@ -56,7 +56,7 @@ runners = runners[runners['Year'] > 1980]
 ```
 
 
-```python, echo=FALSE
+```{python, echo=FALSE}
 numeric_dict = {'F' : 0, 'M' : 1, "Athletics Men's 100 metres" : 100, "Athletics Women's 100 metres" : 100, "Athletics Men's 200 metres" : 200, \
                 "Athletics Women's 200 metres" : 200, "Athletics Men's 400 metres" : 400, "Athletics Women's 400 metres" : 400, "Athletics Men's 800 metres" : 800, \
                 "Athletics Women's 800 metres" : 800, "Athletics Men's 1,500 metres" : 1500, "Athletics Women's 1,500 metres" : 1500,  "Athletics Women's 5,000 metres" : 5000, \
@@ -65,21 +65,21 @@ numeric_dict = {'F' : 0, 'M' : 1, "Athletics Men's 100 metres" : 100, "Athletics
 ```
 
 
-```python, echo=FALSE
+```{python, echo=FALSE}
 r_numeric = runners.replace({"Sex": numeric_dict, 'Event': numeric_dict, 'Medal': numeric_dict})
 
 r_numeric['Medal'] = r_numeric['Medal'].fillna(1)
 ```
 
 
-```python, echo=FALSE
+```{python, echo=FALSE}
 r_numeric.dropna(inplace = True)
 ```
 
 We looked at the data from actual Olympic athletes so you don't have to, and here's how it looked like:
 
 
-```python, echo=FALSE
+```{python, echo=FALSE}
 sns.set_theme(color_codes=True)
 sns.regplot(x='Height', y='Weight', data=r_numeric[r_numeric['Sex'] == 1])
 ```
@@ -98,7 +98,7 @@ sns.regplot(x='Height', y='Weight', data=r_numeric[r_numeric['Sex'] == 1])
 
 
 
-```python, echo=FALSE
+```{python, echo=FALSE}
 sns.regplot(x='Height', y='Weight', data=r_numeric[r_numeric['Sex'] == 0])
 ```
 
@@ -126,19 +126,19 @@ What we realised during our investigation is...
 Now, let's see how we can make all of this useful to you. Let's start by getting to know you better.
 
 
-```python, echo=FALSE
+```{python, echo=FALSE}
 r_sprint = r_numeric.loc[r_numeric['Event'] < 500]
 r_middle = r_numeric.loc[(r_numeric['Event']) > 700 & (r_numeric['Event'] < 1600)]
 r_long = r_numeric.loc[r_numeric['Event'] > 4000]
 ```
 
 
-```python, echo=FALSE
+```{python, echo=FALSE}
 X_train, X_test, w_train, w_test = train_test_split(r_numeric[['Sex', 'Age','Height', 'Year', 'Event','Medal']], r_numeric['Weight'], random_state = 42, test_size = 0.2)
 ```
 
 
-```python, echo=FALSE
+```{python, echo=FALSE}
 regr = LinearRegression()
 
 regr.fit(X_train, w_train)
@@ -149,6 +149,6 @@ r2_score(w_test, w_pred)
 ```
 
 
-```python, echo=FALSE
+```{python, echo=FALSE}
 
 ```
